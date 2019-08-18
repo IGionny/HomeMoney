@@ -3,9 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <TypeScriptToolsVersion>3.5.3</TypeScriptToolsVersion>
-
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -43,6 +48,9 @@
     <Content CopyToPublishDirectory="Always" Update="Base_Data\**\*" />
     <Content CopyToPublishDirectory="Never" Update="Typescript\**\*" />
     <Content CopyToPublishDirectory="Always" Update="Base_Data\appsettings.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot" />
   </ItemGroup>
 
 </Project>

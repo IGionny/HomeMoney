@@ -1,20 +1,23 @@
-let path = require('path');
-let webpack = require('webpack');
+const path = require('path');
+require('webpack');
 const {VueLoaderPlugin} = require('vue-loader');
+
+let isDev = process.env.NODE_ENV !==  "productionm";
 
 module.exports = {
   entry: {
-    HomeMoney: './Typescript/VueUI/HomeMoney/HomeMoney.ts',
+    HomeMoney: './Typescript/VueJS/App/App.ts',
   },
   output: {
     path: path.resolve(__dirname, './wwwroot/VueUI/'),
-    publicPath: '/VueUI/',
+    publicPath: '/VueJS/',
     filename: '[name].js'
   },
   mode: process.env.NODE_ENV,
   externals: {
     "jquery": "jQuery",
     "vue": 'Vue',
+    "vuetify": 'Vuetify',
     "vee-validate": "VeeValidate",
     "chart.js": "Chart",
     "moment": "moment",
@@ -30,9 +33,8 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        include: path.resolve(__dirname, 'Typescript', "VueUI"),
-        exclude: /node_modules/,
-        //loader: 'vue-loader'
+        include: path.resolve(__dirname, 'Typescript', "VueJS"),
+        //    exclude: /node_modules/,
         use: ["cache-loader", "vue-loader"]
       },
       {
@@ -46,50 +48,25 @@ module.exports = {
             }
           }
         ],
-//        loader: 'ts-loader',
-        include: path.resolve(__dirname, 'Typescript', "VueUI"),
-        exclude: /node_modules/,
+        include: path.resolve(__dirname, 'Typescript', "VueJS"),
+        // exclude: /node_modules/,
 
       },
       {
-        test: /\.css$/,
-        include: path.resolve(__dirname, 'Typescript', "VueUI"),
-        oneOf: [
-          // this applies to <style module>
+        test: /\.s(c|a)ss$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
           {
-            resourceQuery: /module/,
-            use: [
-              'vue-style-loader',
-              {
-                loader: 'css-loader',
-                options: {
-                  modules: true,
-                  localIdentName: '[local]_[hash:base64:8]'
-                }
-              }
-            ]
-          },
-          // this applies to <style> or <style scoped>
-          {
-            use: [
-              'vue-style-loader',
-              'css-loader'
-            ]
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+              fiber: require('fibers'),
+              indentedSyntax: true // optional
+            }
           }
         ]
       }
-      /*,{
-          test: /\.(png|jpg|gif|svg)$/,
-          loader: 'file-loader',
-          options: {
-              name: '[name].[ext]?[hash]'
-          }
-      }*/
-      /*{
-         test: /\.js$/,
-         loader: 'babel-loader',
-         exclude: /node_modules/
-     },*/
     ]
   },
 
