@@ -359,3 +359,4 @@ MigrationBackup/
 .idea/
 *.sln.iml
 
+/src/HomeMoney.Mvc/App_Data/Configurations/appsettings.custom.json

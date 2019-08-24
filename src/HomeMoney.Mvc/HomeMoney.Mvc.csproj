@@ -52,5 +52,8 @@
   <ItemGroup>
     <Folder Include="wwwroot" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HomeMoney.Core\HomeMoney.Core.csproj" />
+  </ItemGroup>
 
 </Project>

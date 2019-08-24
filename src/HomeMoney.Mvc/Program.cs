@@ -18,9 +18,26 @@ namespace HomeMoney.Mvc
       CreateWebHostBuilder(args).Build().Run();
     }
 
+    public static IConfigurationRoot MakeConfigurationByAppSettingsJson()
+    {
+      
+      return new ConfigurationBuilder()
+        .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "Configurations"))
+        .AddJsonFile("appsettings.json", false, true)
+        .AddJsonFile(
+          $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json",
+          true, true)
+        .AddJsonFile("appsettings.custom.json", true, true)
+        .AddEnvironmentVariables()
+        .Build();
+    }
+
+
     public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
       WebHost.CreateDefaultBuilder(args)
-        .UseStartup<Startup>().ConfigureKestrel((context, options) =>
+        .UseStartup<Startup>()
+        .UseConfiguration(MakeConfigurationByAppSettingsJson())
+        .ConfigureKestrel((context, options) =>
         {
           options.AddServerHeader = false;
           /*

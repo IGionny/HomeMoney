@@ -3,13 +3,16 @@ using System.IO;
 using System.Reflection;
 using HomeMoney.Mvc.Extensions;
 using HomeMoney.Mvc.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Swashbuckle.AspNetCore.Swagger;
@@ -18,6 +21,15 @@ namespace HomeMoney.Mvc
 {
   public class Startup
   {
+    public Startup(IConfiguration configuration)
+    {
+      Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; }
+
+
+    
     // This method gets called by the runtime. Use this method to add services to the container.
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
@@ -39,6 +51,24 @@ namespace HomeMoney.Mvc
         .RemovePlainFormatter()
         .SetAuthorizePage();
 
+      //this make WHOLE site under authorization
+      services.AddMvc(config =>
+      {
+        var policy = new AuthorizationPolicyBuilder()
+          .RequireAuthenticatedUser()
+          .Build();
+        config.Filters.Add(new AuthorizeFilter(policy));
+      });
+      
+
+      services.AddAuthentication().AddGoogle(googleOptions =>
+      {
+        IConfigurationSection googleAuthNSection = Configuration.GetSection("GoogleAuthentication");
+        googleOptions.ClientId = googleAuthNSection["ClientId"];
+        googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+      });
+
+      
       //.AddFluentValidation();
       services.AddSwaggerGen(c =>
       {
@@ -93,6 +123,8 @@ namespace HomeMoney.Mvc
       app.UsePageNotFound();
       //Add support for Swagger
       app.AddSwagger();
+
+      app.UseAuthentication();
 
       app.UseMvcWithDefaultAreaRoutes();
     }
