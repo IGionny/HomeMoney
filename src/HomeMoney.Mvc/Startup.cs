@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using HomeMoney.Mvc.Extensions;
 using HomeMoney.Mvc.Utilities;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,48 +29,48 @@ namespace HomeMoney.Mvc
 
     public IConfiguration Configuration { get; }
 
-
-    
-    // This method gets called by the runtime. Use this method to add services to the container.
-    // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
     {
       services.Configure<FormOptions>(x => { x.MultipartBodyLengthLimit = int.MaxValue; });
 
       services.Configure<CookiePolicyOptions>(options =>
       {
-        // This lambda determines whether user consent for non-essential cookies is needed for a given request.
         options.CheckConsentNeeded = context => true;
         options.MinimumSameSitePolicy = SameSiteMode.None;
       });
 
       services.AddMvcCore()
         .SetJsonFormatter();
-      services.AddMvc()
+      services.AddMvc(config =>
+        {
+          var policy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
+          config.Filters.Add(new AuthorizeFilter(policy));
+        })
         .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-        //.EnableAuthentication()
         .RemovePlainFormatter()
         .SetAuthorizePage();
 
-      //this make WHOLE site under authorization
-      services.AddMvc(config =>
-      {
-        var policy = new AuthorizationPolicyBuilder()
-          .RequireAuthenticatedUser()
-          .Build();
-        config.Filters.Add(new AuthorizeFilter(policy));
-      });
-      
+      services.AddAuthentication(options =>
+        {
+          options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+          options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+          options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+          options =>
+          {
+            options.LoginPath = new PathString("/account/login");
+            options.LogoutPath = new PathString("/account/logout");
+            options.AccessDeniedPath = new PathString("/account/denied");
+          })
+        .AddGoogle(googleOptions =>
+        {
+          var googleAuthNSection = Configuration.GetSection("GoogleAuthentication");
+          googleOptions.ClientId = googleAuthNSection["ClientId"];
+          googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+        });
 
-      services.AddAuthentication().AddGoogle(googleOptions =>
-      {
-        IConfigurationSection googleAuthNSection = Configuration.GetSection("GoogleAuthentication");
-        googleOptions.ClientId = googleAuthNSection["ClientId"];
-        googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
-      });
-
-      
-      //.AddFluentValidation();
       services.AddSwaggerGen(c =>
       {
         c.SwaggerDoc("v1", new Info {Title = "HomeMoney Web API", Version = "v1"});

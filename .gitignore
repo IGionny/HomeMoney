@@ -360,3 +360,6 @@ MigrationBackup/
 *.sln.iml
 
 /src/HomeMoney.Mvc/App_Data/Configurations/appsettings.custom.json
+/src/HomeMoney.Mvc/App_Data/Logs/*
+/src/HomeMoney.Mvc/wwwroot/VueUI/*
+/src/HomeMoney.Mvc/wwwroot/VueJS/*

@@ -13,4 +13,9 @@ namespace HomeMoney.Core.Domain
     public class ApplicationUser : IdentityUser
     {
     }
+
+    public class ApplicationRole
+    {
+        
+    }
 }

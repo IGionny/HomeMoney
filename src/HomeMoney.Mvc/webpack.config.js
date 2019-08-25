@@ -6,10 +6,11 @@ let isDev = process.env.NODE_ENV !==  "productionm";
 
 module.exports = {
   entry: {
-    HomeMoney: './Typescript/VueJS/App/App.ts',
+    App: './Typescript/VueJS/App/App.ts',
+    Login: './Typescript/VueJS/Login/Login.ts',
   },
   output: {
-    path: path.resolve(__dirname, './wwwroot/VueUI/'),
+    path: path.resolve(__dirname, './wwwroot/VueJS/'),
     publicPath: '/VueJS/',
     filename: '[name].js'
   },
@@ -22,6 +23,7 @@ module.exports = {
     "chart.js": "Chart",
     "moment": "moment",
     "moment-timezone": "moment-timezone",
+    'vuetify': 'vuetify/lib'
   },
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],

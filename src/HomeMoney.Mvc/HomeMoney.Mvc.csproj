@@ -55,5 +55,8 @@
   <ItemGroup>
     <ProjectReference Include="..\HomeMoney.Core\HomeMoney.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\VueUI\HomeMoney.js" />
+  </ItemGroup>
 
 </Project>

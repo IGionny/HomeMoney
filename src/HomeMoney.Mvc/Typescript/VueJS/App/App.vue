@@ -1,5 +1,7 @@
 <template>
   <v-app id="inspire">
+    <NavigationDrawer :drawer="drawer"></NavigationDrawer>
+    <!--
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -24,7 +26,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
+-->
     <v-app-bar
       app
       clipped-left
@@ -33,6 +35,32 @@
       <v-toolbar-title>
         <i class="fas fa-wallet"></i> Home Money
       </v-toolbar-title>
+
+      <v-flex xs3 offset-xs9 align-end text-right>
+
+
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+
+            <v-chip
+              class="ma-2"
+              color="primary"
+              label
+              v-on="on"
+            >
+              <v-icon left>mdi-account-circle-outline</v-icon>
+              {{UserContext.Name}}
+            </v-chip>
+          </template>
+          <v-list>
+            <v-list-item>
+              <a href="/Account/Logout">Logout</a>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+      </v-flex>
+
     </v-app-bar>
 
     <v-content>
@@ -44,12 +72,11 @@
           align="center"
           justify="center"
         >
-          
-         
-            
-            <Playground></Playground>
-            
-          
+
+
+          <HomeIndex></HomeIndex>
+
+
         </v-row>
       </v-container>
     </v-content>
@@ -63,13 +90,31 @@
 <script lang="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
-    import Playground from "./components/Playground.vue";
+    import HomeIndex from "./Home/Index.vue";
+    import {IUserContext} from "../../@types/IUserContext";
+    import NavigationDrawer from "./components/NavigationDrawer.vue";
+
     @Component({
-        components: {Playground}
+        components: {NavigationDrawer, HomeIndex}
     })
     export default class AppVue extends Vue {
 
         drawer: boolean = false;
-        source : string = "";
+
+        UserContext: IUserContext = {
+            Name: "",
+            Email: ""
+        };
+
+        mounted() {
+            let el = document.getElementById("UserContext");
+
+            if (el !== null) {
+                this.UserContext = JSON.parse(el.innerHTML) as IUserContext;
+            }
+
+
+        }
+
     }
 </script>

@@ -15,64 +15,12 @@
             md="4"
           >
             <v-card class="elevation-12">
-              <v-toolbar
-                color="primary"
-                dark
-                flat
-              >
-                <v-toolbar-title>Login form</v-toolbar-title>
-                <div class="flex-grow-1"></div>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      :href="source"
-                      icon
-                      large
-                      target="_blank"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-code-tags</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Source</span>
-                </v-tooltip>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      icon
-                      large
-                      href="https://codepen.io/johnjleider/pen/pMvGQO"
-                      target="_blank"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-codepen</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Codepen</span>
-                </v-tooltip>
-              </v-toolbar>
-              <v-card-text>
-                <v-form>
-                  <v-text-field
-                    label="Login"
-                    name="login"
-                    prepend-icon="person"
-                    type="text"
-                  ></v-text-field>
-
-                  <v-text-field
-                    id="password"
-                    label="Password"
-                    name="password"
-                    prepend-icon="lock"
-                    type="password"
-                  ></v-text-field>
-                </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <div class="flex-grow-1"></div>
-                <v-btn color="primary">Login</v-btn>
-              </v-card-actions>
+              <div class="text-center pt-2 pb-2">
+                <div>Login with</div>
+                <a href="/account/ExternalSignIn?service=Google">
+                  <img src="https://www.google.it/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"/>
+                </a>
+              </div>
             </v-card>
           </v-col>
         </v-row>
@@ -85,13 +33,9 @@
 <script lang="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
-    import Playground from "./components/Playground.vue";
-    @Component({
-        components: {Playground}
-    })
-    export default class AppVue extends Vue {
 
-        drawer: boolean = false;
-        source : string = "";
+    @Component
+    export default class LoginVue extends Vue {
+
     }
 </script>

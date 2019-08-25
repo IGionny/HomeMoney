@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace HomeMoney.Mvc
@@ -15,12 +11,18 @@ namespace HomeMoney.Mvc
   {
     public static void Main(string[] args)
     {
-      CreateWebHostBuilder(args).Build().Run();
+      var configuration = MakeConfigurationByAppSettingsJson();
+      Log.Logger = new LoggerConfiguration()
+        .ReadFrom.Configuration(configuration)
+        //.Enrich.FromLogContext()
+        //.WriteTo.Console()
+        .CreateLogger();
+
+      CreateWebHostBuilder(args, configuration).Build().Run();
     }
 
     public static IConfigurationRoot MakeConfigurationByAppSettingsJson()
     {
-      
       return new ConfigurationBuilder()
         .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "Configurations"))
         .AddJsonFile("appsettings.json", false, true)
@@ -33,10 +35,10 @@ namespace HomeMoney.Mvc
     }
 
 
-    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+    public static IWebHostBuilder CreateWebHostBuilder(string[] args, IConfigurationRoot configuration) =>
       WebHost.CreateDefaultBuilder(args)
         .UseStartup<Startup>()
-        .UseConfiguration(MakeConfigurationByAppSettingsJson())
+        .UseConfiguration(configuration)
         .ConfigureKestrel((context, options) =>
         {
           options.AddServerHeader = false;
