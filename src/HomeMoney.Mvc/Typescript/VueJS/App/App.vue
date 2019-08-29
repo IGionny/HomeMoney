@@ -31,7 +31,7 @@
       app
       clipped-left
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" :icon="true"><i class="fas fa-bars"></i></v-app-bar-nav-icon>
       <v-toolbar-title>
         <i class="fas fa-wallet"></i> Home Money
       </v-toolbar-title>
@@ -73,9 +73,7 @@
           justify="center"
         >
 
-
-          <HomeIndex></HomeIndex>
-
+          <router-view></router-view>
 
         </v-row>
       </v-container>

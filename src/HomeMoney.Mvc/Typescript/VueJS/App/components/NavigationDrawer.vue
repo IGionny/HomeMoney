@@ -60,7 +60,8 @@
         <v-list-item
           v-else
           :key="item.text"
-          @click=""
+          :to="item.url"
+          :exact="item.exact"
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -80,18 +81,18 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import {Prop} from "vue-property-decorator";
-    
+
     @Component
     export default class NavigationDrawerVue extends Vue {
-        @Prop({default:false}) drawer !: boolean;
-        
-        items : any[] = [
-            {icon: 'fa-desktop', text: 'Dashboard'},
-            { icon: 'fa-funnel-dollar', text: 'Transactions' },
-            { icon: 'fa-wallet', text: 'Accounts' },
-            { icon: 'fa-list-ul', text: 'Categories' },
-            { icon: 'fa-chart-pie', text: 'Charts' },
-            { icon: 'fa-file-csv', text: 'Compare with csv' }
+        @Prop({default: false}) drawer !: boolean;
+
+        items: any[] = [
+            {icon: 'fa-desktop', text: 'Dashboard', url: "/", exact: true},
+            {icon: 'fa-funnel-dollar', text: 'Transactions', url: "/Transactions", exact: false},
+            {icon: 'fa-wallet', text: 'Accounts', url: "/Accounts", exact: true},
+            {icon: 'fa-list-ul', text: 'Categories', url: "/Categories", exact: false},
+            {icon: 'fa-chart-pie', text: 'Charts', url: "/Carts", exact: false},
+            {icon: 'fa-file-csv', text: 'Compare with csv', url: "/ImportCSV", exact: false}
             /*
             { icon: 'content_copy', text: 'Duplicates' },
             {

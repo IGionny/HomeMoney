@@ -15,12 +15,13 @@
     //"noImplicitThis": true, -> strict = true
     //"inlineSourceMap": true, //needed to debug in chrome if sourceMap is true
     //"inlineSources": true, //needed to debug in chrome if sourceMap is true
-    "target": "es5",
+    "target": "ESNext",
     "module": "es2015",
     "moduleResolution": "node",
     "lib": [
       "es2015",
       "es2015.iterable",
+      "es2017.object",
       //added iterable because it's in use into the JQuery d.ts) 
       "dom"
     ],
