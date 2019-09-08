@@ -1,8 +1,11 @@
 const path = require('path');
 require('webpack');
 const {VueLoaderPlugin} = require('vue-loader');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
 
-let isDev = process.env.NODE_ENV !==  "productionm";
+let isDev = process.env.NODE_ENV !==  "production";
 
 module.exports = {
   entry: {
@@ -18,12 +21,10 @@ module.exports = {
   externals: {
     "jquery": "jQuery",
     "vue": 'Vue',
-    "vuetify": 'Vuetify',
-    "vee-validate": "VeeValidate",
+   // "vee-validate": "VeeValidate",
     "chart.js": "Chart",
     "moment": "moment",
-    "moment-timezone": "moment-timezone",
-    'vuetify': 'vuetify/lib'
+    "moment-timezone": "moment-timezone"
   },
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
@@ -35,12 +36,13 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        include: path.resolve(__dirname, 'Typescript', "VueJS"),
-        //    exclude: /node_modules/,
+        //include: path.resolve(__dirname, 'Typescript', "VueJS"),
+        //exclude: /node_modules/,
         use: ["cache-loader", "vue-loader"]
       },
       {
         test: /\.tsx?$/,
+        //exclude: /node_modules/,
         use: [
           "cache-loader",
           {
@@ -50,23 +52,25 @@ module.exports = {
             }
           }
         ],
-        include: path.resolve(__dirname, 'Typescript', "VueJS"),
-        // exclude: /node_modules/,
-
+        //include: path.resolve(__dirname, 'Typescript', "VueJS"),
       },
       {
         test: /\.s(c|a)ss$/,
+        //exclude: /node_modules/,
         use: [
           'vue-style-loader',
           'css-loader',
           {
             loader: 'sass-loader',
+            // Requires sass-loader@^8.0.0
             options: {
               implementation: require('sass'),
-              fiber: require('fibers'),
-              indentedSyntax: true // optional
-            }
-          }
+              sassOptions: {
+                fiber: require('fibers'),
+                indentedSyntax: true // optional
+              },
+            },
+          },
         ]
       }
     ]
@@ -77,9 +81,12 @@ module.exports = {
     noInfo: true,
     overlay: true
   },
-  devtool: 'eval',
+  devtool: 'eval-map',
   plugins: [
     // make sure to include the plugin for the magic
-    new VueLoaderPlugin()
+    new BundleAnalyzerPlugin(),
+    new VueLoaderPlugin(),
+    new VuetifyLoaderPlugin()
+
   ]
 };

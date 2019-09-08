@@ -1,16 +1,9 @@
 import Vue from 'vue';
 import App from './Login.vue';
-import Vuetify from 'vuetify/lib';
-
-Vue.use(Vuetify);
-const vuetifyOptions = {
-  theme: {
-    dark: true
-  }
-};
+import vuetify from '../../plugins/Vuetify';
 
 new Vue({
   el: '#App',
   render: h => h(App),
-  vuetify: new Vuetify(vuetifyOptions)
+  vuetify
 });

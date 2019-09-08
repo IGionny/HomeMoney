@@ -13,19 +13,19 @@ namespace DefaultNamespace
     [Route("/Transactions")]
     public IActionResult Transactions()
     {
-      return Index();
+      return View("Index");
     }
     
     [Route("/Accounts")]
     public IActionResult Accounts()
     {
-      return Index();
+      return View("Index");
     }
     
     [Route("/Categories")]
     public IActionResult Categories()
     {
-      return Index();
+      return View("Index");
     }
   }
 }

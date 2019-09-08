@@ -1,26 +1,46 @@
 <template>
   <div>
-    <v-data-table dense :headers="headers" :items="items" :item-key="'name'" :items-per-page="5" class="elevation-1"></v-data-table>
+    <v-data-table
+      :headers="headers"
+      :items="desserts"
+      :items-per-page="5"
+      class="elevation-1"
+    ></v-data-table>
+    
   </div>
 </template>
 
 <script lang="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
+    
+    export interface IDessert{
+        name : string;
+        calories: number;
+        fat: number;
+        carbs: number;
+        protein:number;
+        iron:string;
+    }
 
+    @Component
     export default class TransactionsVue extends Vue {
-        headers: any[] = [{
-            text: 'Dessert (100g serving)',
-            align: 'left',
-            sortable: false,
-            value: 'name',
-        },
+        headers: object[] = [
+            {
+                text: 'Dessert (100g serving)',
+                align: 'left',
+                sortable: false,
+                value: 'name',
+            },
             { text: 'Calories', value: 'calories' },
             { text: 'Fat (g)', value: 'fat' },
             { text: 'Carbs (g)', value: 'carbs' },
             { text: 'Protein (g)', value: 'protein' },
-            { text: 'Iron (%)', value: 'iron' }]
-        items: any[] = [
+            { text: 'Iron (%)', value: 'iron' },
+        ];
+
+
+        desserts: IDessert[] = [
             {
                 name: 'Frozen Yogurt',
                 calories: 159,
@@ -100,7 +120,7 @@
                 carbs: 65,
                 protein: 7,
                 iron: '6%',
-            }
+            },
         ]
     }
 </script>
