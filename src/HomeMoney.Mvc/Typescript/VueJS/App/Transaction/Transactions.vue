@@ -2,125 +2,51 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="desserts"
-      :items-per-page="5"
+      :items="transactions"
+      :items-per-page="15"
       class="elevation-1"
     ></v-data-table>
-    
+
   </div>
 </template>
 
 <script lang="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
-    
-    export interface IDessert{
-        name : string;
-        calories: number;
-        fat: number;
-        carbs: number;
-        protein:number;
-        iron:string;
+
+    export interface ITransactionRow {
+        Date: string;
+        Title: string;
+        Expense: number;
+        Income: number;
+        Category: string;
+        Tags: string;
+        CreatedAt: string;
     }
 
     @Component
     export default class TransactionsVue extends Vue {
         headers: object[] = [
-            {
-                text: 'Dessert (100g serving)',
-                align: 'left',
-                sortable: false,
-                value: 'name',
-            },
-            { text: 'Calories', value: 'calories' },
-            { text: 'Fat (g)', value: 'fat' },
-            { text: 'Carbs (g)', value: 'carbs' },
-            { text: 'Protein (g)', value: 'protein' },
-            { text: 'Iron (%)', value: 'iron' },
+            {text: 'Date', value: 'Date'},
+            {text: 'Title', value: 'Title'},
+            {text: 'Expense', value: 'Expense'},
+            {text: 'Income', value: 'Income'},
+            {text: 'Category', value: 'Category'},
+            {text: 'Tags', value: 'Tags'},
+            {text: 'Created At', value: 'CreatedAt'},
         ];
 
 
-        desserts: IDessert[] = [
+        transactions: ITransactionRow[] = [
             {
-                name: 'Frozen Yogurt',
-                calories: 159,
-                fat: 6.0,
-                carbs: 24,
-                protein: 4.0,
-                iron: '1%',
-            },
-            {
-                name: 'Ice cream sandwich',
-                calories: 237,
-                fat: 9.0,
-                carbs: 37,
-                protein: 4.3,
-                iron: '1%',
-            },
-            {
-                name: 'Eclair',
-                calories: 262,
-                fat: 16.0,
-                carbs: 23,
-                protein: 6.0,
-                iron: '7%',
-            },
-            {
-                name: 'Cupcake',
-                calories: 305,
-                fat: 3.7,
-                carbs: 67,
-                protein: 4.3,
-                iron: '8%',
-            },
-            {
-                name: 'Gingerbread',
-                calories: 356,
-                fat: 16.0,
-                carbs: 49,
-                protein: 3.9,
-                iron: '16%',
-            },
-            {
-                name: 'Jelly bean',
-                calories: 375,
-                fat: 0.0,
-                carbs: 94,
-                protein: 0.0,
-                iron: '0%',
-            },
-            {
-                name: 'Lollipop',
-                calories: 392,
-                fat: 0.2,
-                carbs: 98,
-                protein: 0,
-                iron: '2%',
-            },
-            {
-                name: 'Honeycomb',
-                calories: 408,
-                fat: 3.2,
-                carbs: 87,
-                protein: 6.5,
-                iron: '45%',
-            },
-            {
-                name: 'Donut',
-                calories: 452,
-                fat: 25.0,
-                carbs: 51,
-                protein: 4.9,
-                iron: '22%',
-            },
-            {
-                name: 'KitKat',
-                calories: 518,
-                fat: 26.0,
-                carbs: 65,
-                protein: 7,
-                iron: '6%',
-            },
+                Date: "",
+                Title: "",
+                Expense: 100,
+                Income: 0,
+                Category: "Grocery",
+                Tags: "x",
+                CreatedAt: ""
+            }
         ]
     }
 </script>

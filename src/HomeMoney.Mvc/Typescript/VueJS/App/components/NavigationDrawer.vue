@@ -91,7 +91,7 @@
             {icon: 'fa-funnel-dollar', text: 'Transactions', url: "/Transactions", exact: false},
             {icon: 'fa-wallet', text: 'Accounts', url: "/Accounts", exact: true},
             {icon: 'fa-list-ul', text: 'Categories', url: "/Categories", exact: false},
-            {icon: 'fa-chart-pie', text: 'Charts', url: "/Carts", exact: false},
+            {icon: 'fa-chart-pie', text: 'Charts', url: "/Charts", exact: false},
             {icon: 'fa-file-csv', text: 'Compare with csv', url: "/ImportCSV", exact: false}
             /*
             { icon: 'content_copy', text: 'Duplicates' },
