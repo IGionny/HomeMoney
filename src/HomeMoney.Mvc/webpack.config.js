@@ -23,8 +23,8 @@ module.exports = {
     "vue": 'Vue',
    // "vee-validate": "VeeValidate",
     "chart.js": "Chart",
-    "moment": "moment",
-    "moment-timezone": "moment-timezone"
+    //"moment": "moment",
+    //"moment-timezone": "moment-timezone"
   },
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
@@ -84,7 +84,7 @@ module.exports = {
   devtool: 'eval-map',
   plugins: [
     // make sure to include the plugin for the magic
-    new BundleAnalyzerPlugin(),
+    //new BundleAnalyzerPlugin(),
     new VueLoaderPlugin(),
     new VuetifyLoaderPlugin()
 

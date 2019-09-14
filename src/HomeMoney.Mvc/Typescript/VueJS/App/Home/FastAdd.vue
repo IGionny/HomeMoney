@@ -1,35 +1,33 @@
 <template>
-  <div>
-    <v-card>
-      <v-tabs
-        background-color=" accent-4"
-        center-active
-        dark
-      >
-        <v-tab>
-          Expense
+  <v-card  style="min-width:450px;">
+    <v-tabs
+      background-color=" accent-4"
+      center-active
+      dark
+    >
+      <v-tab>
+        Expense
 
-        </v-tab>
-        <v-tab>Transfer
+      </v-tab>
+      <v-tab>Transfer
 
-        </v-tab>
-        <v-tab>Income
-        </v-tab>
+      </v-tab>
+      <v-tab>Income
+      </v-tab>
 
-        <v-tab-item>
-          <AddExpense></AddExpense>
-        </v-tab-item>
-        <v-tab-item>
-          2
-        </v-tab-item>
-        <v-tab-item>
-          3
-        </v-tab-item>
-      </v-tabs>
+      <v-tab-item>
+        <AddExpense class="m-2  pa-3 mt-4"></AddExpense>
+      </v-tab-item>
+      <v-tab-item>
+        2
+      </v-tab-item>
+      <v-tab-item>
+        3
+      </v-tab-item>
+    </v-tabs>
 
 
-    </v-card>
-  </div>
+  </v-card>
 </template>
 
 <script lang="ts">
