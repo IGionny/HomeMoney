@@ -32,8 +32,10 @@
       clipped-left
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" :icon="true"><i class="fas fa-bars"></i></v-app-bar-nav-icon>
-      <v-toolbar-title>
+      <v-toolbar-title style="overflow:visible;">
+        <div  class="primary--text" >
         <i class="fas fa-wallet"></i> Home Money
+        </div>
       </v-toolbar-title>
 
       <v-flex xs3 offset-xs9 align-end text-right>

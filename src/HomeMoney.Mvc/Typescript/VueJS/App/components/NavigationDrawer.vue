@@ -62,6 +62,7 @@
           :key="item.text"
           :to="item.url"
           :exact="item.exact"
+          class="primary--text"
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>

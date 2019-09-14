@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib';
+import colors from 'vuetify/lib/util/colors'
 
 Vue.use(Vuetify)
 
 const vuetifyOptions = {
   theme: {
-    dark: true
+    dark: true,
+    themes: {
+      dark: {
+        primary: "#21ba45",
+      }
+    }
   }
 };
 

@@ -1,11 +1,5 @@
 <template>
-  <v-form
-
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
-    
+  <v-form ref="form" v-model="valid" lazy-validation>
     <v-row>
       <v-col cols="12" md="3">
         <v-menu
@@ -22,7 +16,7 @@
             <!--  __@blur="date = parseDate(Item.ExecutedAt)"-->
             <v-text-field
               v-model="Item.ExecutedAt"
-              label="Date"
+              label=""
 
               hint="YYYY/MM/DD"
               persistent-hint
@@ -75,27 +69,63 @@
 
     </v-row>
 
+
     <v-combobox
-      v-model="item.Tags"
-      :items="Tags"
-      :search-input.sync="null"
-      :hide-selected="false"
-      label="Add some tags"
-      :multiple="multiple"
-      persistent-hint
-      :small-chips="true"
-      :clearable="true"
+      v-model="model"
+      :filter="filter"
+      :hide-no-data="!search"
+      :items="items"
+      :search-input.sync="search"
+      hide-selected
+      label="Add some #tags"
+      multiple
+      small-chips
+      solo
     >
       <template v-slot:no-data>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>
-            No results matching "<strong>{{ search }}</strong>". Press <kbd>enter</kbd> to create a new one
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </template>
+        <v-list-item>
+          <span class="subheading">Create</span>
+          <v-chip
+            :color="`${colors[nonce - 1]} `"
+            label
+            small
+          >
+            {{ search }}
+          </v-chip>
+        </v-list-item>
+      </template>
+      <template v-slot:selection="{ attrs, item, parent, selected }">
+        <v-chip
+          v-if="item === Object(item)"
+          v-bind="attrs"
+          :color="`${item.color}`"
+          :input-value="selected"
+          label
+          small
+        >
+        <span class="pr-2">
+          {{ item.text }}
+        </span>
+          <v-icon
+            small
+            @click="parent.selectItem(item)"
+          >fa-times
+          </v-icon>
+        </v-chip>
+      </template>
+      <template v-slot:item="{ index, item }">
+        <v-chip
+          dark
+          label
+          small
+        >
+          {{ item.text }}
+        </v-chip>
+        <div class="flex-grow-1"></div>
+        
+      </template>
     </v-combobox>
+
 
     <v-row>
       <v-col cols="12" md="8">
@@ -105,7 +135,7 @@
           required
         ></v-text-field>
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="4" class="mt-3">
         <v-btn color="primary" dark>Add Expense</v-btn>
       </v-col>
     </v-row>
@@ -119,6 +149,7 @@
     import {IExpenseModel} from "../../../../@types/IExpenseModel";
     import {IEntityReference} from "../../../../@types/IEntityReference";
     import * as moment from 'moment';
+    import {Watch} from "vue-property-decorator";
 
     @Component
     export default class AddExpenseVue extends Vue {
@@ -137,7 +168,7 @@
             /*const [month, day, year] = date.split('/')
             /*return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`*/
         }
-        
+
         Tags: string[] = [];
 
         Item: IExpenseModel = {
@@ -179,6 +210,81 @@
         resetValidation() {
             //@ts-ignore
             this.$refs.form.resetValidation()
+        }
+
+        /*------------*/
+
+        activator: any = null;
+        attach: any = null;
+        colors: string[] = ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'];
+        editing: any = null;
+        index: number = -1;
+        items: any[] = [
+            {header: 'Select a tag or create one'},
+            {
+                text: 'Foo',
+                color: 'blue',
+            },
+            {
+                text: 'Bar',
+                color: 'red',
+            },
+        ];
+        nonce: number = 1;
+        menu: boolean = false;
+        model: any[] = [
+            {
+                text: 'Foo',
+                color: 'blue',
+            },
+        ];
+
+        x: number = 0;
+        search: any = null;
+        y: number = 0;
+
+        @Watch("model")
+        onChangeModel(val: any, prev: any) {
+            if (val.length === prev.length) return;
+
+            this.model = val.map((v:unknown) => {
+                if (typeof v === 'string') {
+                    v = {
+                        text: v,
+                        color: this.colors[this.nonce - 1],
+                    }
+
+                    this.items.push(v)
+
+                    this.nonce++
+                }
+
+                return v
+            })
+        }
+
+
+        edit(index: number, item: any) {
+            if (!this.editing) {
+                this.editing = item
+                this.index = index
+            } else {
+                this.editing = null
+                this.index = -1
+            }
+        };
+
+        filter(item: any, queryText: string, itemText: string) {
+            if (item.header) return false
+
+            const hasValue = (val:any) => val != null ? val : '';
+
+            const text = hasValue(itemText)
+            const query = hasValue(queryText)
+
+            return text.toString()
+                .toLowerCase()
+                .indexOf(query.toString().toLowerCase()) > -1
         }
 
     }
