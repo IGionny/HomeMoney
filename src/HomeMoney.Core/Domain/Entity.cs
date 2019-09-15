@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace HomeMoney.Core.Domain
 {
@@ -19,6 +20,16 @@ namespace HomeMoney.Core.Domain
 
     public class EntityReference
     {
+        public EntityReference()
+        {
+            
+        }
+
+        public EntityReference(Guid id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
         public Guid Id { get; set; }
         public string Name { get; set; }
     }

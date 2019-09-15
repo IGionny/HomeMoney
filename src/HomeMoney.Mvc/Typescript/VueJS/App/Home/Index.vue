@@ -1,7 +1,7 @@
 <template>
   <v-layout column align-center>
     <FastAdd></FastAdd>
-    
+    <LastTransactions></LastTransactions>
   </v-layout>
 </template>
 

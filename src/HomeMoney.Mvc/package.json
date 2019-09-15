@@ -47,6 +47,7 @@
    "dependencies": {
       "@fortawesome/fontawesome-free": "^5.10.2",
       "@types/vuelidate": "^0.7.7",
+      "axios": "^0.19.0",
       "chart.js": "^2.8.0",
       "dinero.js": "1.6.0",
       "jquery": "^3.4.1",
