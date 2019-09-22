@@ -60,9 +60,9 @@ namespace HomeMoney.Mvc
         }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
           options =>
           {
-            options.LoginPath = new PathString("/account/login");
-            options.LogoutPath = new PathString("/account/logout");
-            options.AccessDeniedPath = new PathString("/account/denied");
+            options.LoginPath = new PathString("/user/login");
+            options.LogoutPath = new PathString("/user/logout");
+            options.AccessDeniedPath = new PathString("/user/denied");
           })
         .AddGoogle(googleOptions =>
         {

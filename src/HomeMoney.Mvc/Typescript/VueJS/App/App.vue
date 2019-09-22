@@ -56,7 +56,7 @@
           </template>
           <v-list>
             <v-list-item>
-              <a href="/Account/Logout">Logout</a>
+              <a href="/User/Logout"><i class="fas fa-power-off"></i> Logout</a>
             </v-list-item>
           </v-list>
         </v-menu>

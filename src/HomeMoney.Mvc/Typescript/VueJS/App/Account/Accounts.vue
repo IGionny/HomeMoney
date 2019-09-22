@@ -1,5 +1,8 @@
 <template>
   <div>
+
+    <v-btn to="/accounts/edit/" color="success">Add new Account <v-icon right dark>fa fa-plus</v-icon></v-btn>
+    
     <v-data-table
       :headers="headers"
       :items="accounts"
@@ -26,10 +29,10 @@
     export default class AccountsVue extends Vue {
         headers: object[] = [
             {text: 'Name', value: 'Name'},
-            {text: 'FirstBalance', value: 'FirstBalance'},
+            {text: 'First Balance', value: 'FirstBalance'},
             {text: 'Archived', value: 'IsArchived'},
-            {text: 'FromAt', value: 'FromAt'},
-            {text: 'ToAt', value: 'ToAt'}
+            {text: 'From', value: 'FromAt'},
+            {text: 'To', value: 'ToAt'}
         ];
 
 

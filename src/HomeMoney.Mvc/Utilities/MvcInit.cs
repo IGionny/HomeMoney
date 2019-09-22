@@ -60,7 +60,7 @@ namespace HomeMoney.Mvc.Utilities
 
     public static IMvcBuilder SetAuthorizePage(
       this IMvcBuilder mvcBuilder,
-      string authorizeUrl = "/Account/Login")
+      string authorizeUrl = "/user/Login")
     {
       mvcBuilder.AddRazorPagesOptions(
         options => options.Conventions.AuthorizePage(authorizeUrl));

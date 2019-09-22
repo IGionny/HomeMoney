@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DefaultNamespace
 {
-  public class AccountController : Controller
+  public class UserController : Controller
   {
     [HttpGet]
     [AllowAnonymous]

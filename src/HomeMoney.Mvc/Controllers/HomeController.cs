@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DefaultNamespace
@@ -18,6 +19,13 @@ namespace DefaultNamespace
     
     [Route("/Accounts")]
     public IActionResult Accounts()
+    {
+      
+      return View("Index");
+    }
+    
+    [Route("/Accounts/Edit/{id:guid?}")]
+    public IActionResult AccountEdit([FromRoute]Guid? id)
     {
       return View("Index");
     }

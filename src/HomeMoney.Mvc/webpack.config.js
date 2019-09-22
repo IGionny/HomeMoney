@@ -21,7 +21,6 @@ module.exports = {
   externals: {
     "jquery": "jQuery",
     "vue": 'Vue',
-   // "vee-validate": "VeeValidate",
     "chart.js": "Chart",
     //"moment": "moment",
     //"moment-timezone": "moment-timezone"
@@ -83,7 +82,7 @@ module.exports = {
   },
   devtool: 'eval-map',
   plugins: [
-    // make sure to include the plugin for the magic
+    // add this bundle if you want to analyze the size of the generated bundles
     //new BundleAnalyzerPlugin(),
     new VueLoaderPlugin(),
     new VuetifyLoaderPlugin()
