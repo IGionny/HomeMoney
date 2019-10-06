@@ -1,7 +1,5 @@
 <template>
   <v-form ref="form" v-model="valid" lazy-validation>
-
-
     <v-row>
       <v-col cols="12" md="6">
         <v-select
@@ -90,7 +88,7 @@
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="4" class="mt-3">
-        <v-btn color="primary" dark>Add transfer</v-btn>
+        <v-btn color="info" dark>Add transfer</v-btn>
       </v-col>
     </v-row>
 
@@ -111,6 +109,8 @@
     })
     export default class AddTransferVue extends Vue {
 
+        valid: boolean = true;
+        
         formatDate(date: string | null | undefined) {
             if (!date) return null
 
