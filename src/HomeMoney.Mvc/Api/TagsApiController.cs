@@ -9,10 +9,10 @@ namespace DefaultNamespace
   public class TagsApiController : BaseApiController
   {
     [HttpGet("Search/{tag}")]
-    public async Task<IActionResult> SearchTags([FromRoute] string tag)
+    public Task<IActionResult> SearchTags([FromRoute] string tag)
     {
       var hardEncodedList = new string[] {"Test", "Nice", "Baloon", "Green", "Yellow", "Fantastic"};
-      return Ok(hardEncodedList.Where(x => x.Contains(tag, StringComparison.InvariantCultureIgnoreCase)).ToList());
+      return Task.FromResult<IActionResult>(Ok(hardEncodedList.Where(x => x.Contains(tag, StringComparison.InvariantCultureIgnoreCase)).ToList()));
     }
   }
 }

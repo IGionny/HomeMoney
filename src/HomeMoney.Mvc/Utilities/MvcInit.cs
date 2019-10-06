@@ -44,9 +44,9 @@ namespace HomeMoney.Mvc.Utilities
     public static IMvcCoreBuilder SetJsonFormatter(
       this IMvcCoreBuilder mvcCoreBuilder)
     {
-      mvcCoreBuilder.AddJsonOptions(options =>
+      /*mvcCoreBuilder.AddJsonOptions(options =>
           options.SerializerSettings.ContractResolver = (IContractResolver) new DefaultContractResolver())
-        .AddJsonFormatters();
+        .AddJsonFormatters();*/
       return mvcCoreBuilder;
     }
 

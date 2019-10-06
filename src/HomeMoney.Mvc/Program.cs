@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace HomeMoney.Mvc
@@ -15,7 +16,7 @@ namespace HomeMoney.Mvc
       Log.Logger = new LoggerConfiguration()
         .ReadFrom.Configuration(configuration)
         //.Enrich.FromLogContext()
-        //.WriteTo.Console()
+        .WriteTo.Console()
         .CreateLogger();
 
       CreateWebHostBuilder(args, configuration).Build().Run();
@@ -35,22 +36,21 @@ namespace HomeMoney.Mvc
     }
 
 
-    public static IWebHostBuilder CreateWebHostBuilder(string[] args, IConfigurationRoot configuration) =>
-      WebHost.CreateDefaultBuilder(args)
-        .UseStartup<Startup>()
-        .UseConfiguration(configuration)
-        .ConfigureKestrel((context, options) =>
-        {
-          options.AddServerHeader = false;
-          /*
-           * To permit upload of BIG file you have to edit also the web.config:<requestLimits maxAllowedContentLength="1073741824" />
-           * tnx to: https://stackoverflow.com/questions/38698350/increase-upload-file-size-in-asp-net-core
-           *
-           */
-
-          options.Limits.MaxRequestBodySize = null;
-        })
+    public static IHostBuilder CreateWebHostBuilder(string[] args, IConfigurationRoot configuration) =>
+      Host.CreateDefaultBuilder(args)
         .UseContentRoot(Directory.GetCurrentDirectory())
-        .UseSerilog();
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+          webBuilder.UseKestrel(options =>
+            {
+              // Set properties and call methods on options
+              options.AddServerHeader = false;
+              options.Limits.MaxRequestBodySize = null;
+            })
+            .UseConfiguration(configuration)
+            .UseIISIntegration()
+            .UseStartup<Startup>()
+            .UseSerilog();
+        });
   }
 }

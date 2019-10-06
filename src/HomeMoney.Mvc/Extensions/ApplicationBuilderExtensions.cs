@@ -1,8 +1,7 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+
 
 namespace HomeMoney.Mvc.Extensions
 {
@@ -44,7 +43,7 @@ namespace HomeMoney.Mvc.Extensions
         c.SwaggerEndpoint("/api-swagger/v1/swagger.json", "Ngs.Web API V1");
       });
     }
-    
+
     public static void UsePageNotFound(this IApplicationBuilder application, string notFoundUrl = "/Error/PageNotFound")
     {
       application.UseStatusCodePages(async context =>
@@ -80,11 +79,14 @@ namespace HomeMoney.Mvc.Extensions
 
     public static void UseMvcWithDefaultAreaRoutes(this IApplicationBuilder application)
     {
-      application.UseMvc((Action<IRouteBuilder>) (routes =>
+      application.UseEndpoints(endpoints =>
       {
-        routes.MapRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-        routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-      }));
+        endpoints.MapControllerRoute(
+          name: "default",
+          pattern: "{controller}/{action=Index}/{id?}");
+        endpoints.MapControllers(); // Map attribute-routed API controllers
+        endpoints.MapDefaultControllerRoute(); // Map conventional MVC controllers using the default route
+      });
     }
   }
 }

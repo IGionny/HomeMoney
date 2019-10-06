@@ -1,22 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using HomeMoney.Mvc.Extensions;
-using HomeMoney.Mvc.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace HomeMoney.Mvc
 {
@@ -31,26 +30,17 @@ namespace HomeMoney.Mvc
 
     public void ConfigureServices(IServiceCollection services)
     {
-      services.Configure<FormOptions>(x => { x.MultipartBodyLengthLimit = int.MaxValue; });
-
-      services.Configure<CookiePolicyOptions>(options =>
+      services.AddControllersWithViews(config =>
       {
-        options.CheckConsentNeeded = context => true;
-        options.MinimumSameSitePolicy = SameSiteMode.None;
+        var policy = new AuthorizationPolicyBuilder()
+          .RequireAuthenticatedUser()
+          .Build();
+        config.Filters.Add(new AuthorizeFilter(policy));
       });
+      /*.RemovePlainFormatter()
+      .SetAuthorizePage();*/
+      //  .SetJsonFormatter();
 
-      services.AddMvcCore()
-        .SetJsonFormatter();
-      services.AddMvc(config =>
-        {
-          var policy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .Build();
-          config.Filters.Add(new AuthorizeFilter(policy));
-        })
-        .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-        .RemovePlainFormatter()
-        .SetAuthorizePage();
 
       services.AddAuthentication(options =>
         {
@@ -73,7 +63,7 @@ namespace HomeMoney.Mvc
 
       services.AddSwaggerGen(c =>
       {
-        c.SwaggerDoc("v1", new Info {Title = "HomeMoney Web API", Version = "v1"});
+        c.SwaggerDoc("v1", new OpenApiInfo() {Title = "HomeMoney Web API", Version = "v1"});
         // Set the comments path for the Swagger JSON and UI.
         var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -82,7 +72,7 @@ namespace HomeMoney.Mvc
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       //https://medium.com/@nicolastakashi/asp-net-core-api-behind-the-nginx-reverse-proxy-with-docker-72eeccfb5063
       //this: route incoming headers through the request that arrived at Nginx for our ASP.NET service.
@@ -96,14 +86,17 @@ namespace HomeMoney.Mvc
       {
         app.UseDeveloperExceptionPage();
 
-        // Needed by VueJS Reporting
+        // https://github.com/aspnet/AspNetCore/issues/12890
         // Webpack initialization with hot-reload.
         app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
         {
-          HotModuleReplacement = true
+          HotModuleReplacement = true,
+          HotModuleReplacementClientOptions = new Dictionary<string, string>
+          {
+            {"reload", "true"}, {"aggregateTimeout", "300"}, {"poll", "1000"}
+          }
         });
 
-        //Needed by VueJS reporting to serve local VueJs un-minified version
         app.UseStaticFiles(new StaticFileOptions
         {
           FileProvider = new PhysicalFileProvider(
@@ -114,19 +107,27 @@ namespace HomeMoney.Mvc
       else
       {
         app.UseExceptionHandler("/Error/Error");
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
       }
 
-      app.AddSecurityCountermeasures();
       app.UseHttpsRedirection();
+      
+      app.UseStaticFiles();
+
+      app.UseRouting();
+
+      app.AddSecurityCountermeasures();
+
       app.UseCookiePolicy();
       //404
       app.UsePageNotFound();
-      //Add support for Swagger
+      
       app.AddSwagger();
 
       app.UseAuthentication();
-
+      app.UseAuthorization();
+      
       app.UseMvcWithDefaultAreaRoutes();
     }
   }
