@@ -30,6 +30,9 @@ Domain
 
 Back-End
 - [ ] Asp.Net -> migrate to 3.0
+    - [x] Base migration
+    - [ ] Replace UseWebpackDevMiddleware that is obsolete
+    - [ ] Check json serializer (Newtonsoft is not the default one anymore)
 - [ ] Data handling
     - [ ] Data validation via FluentValidation
     - [ ] Repository with my MiniORM 'Molto'
