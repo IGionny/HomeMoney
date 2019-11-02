@@ -64,7 +64,7 @@
             FromAt: null,
             ToAt: null,
             IsArchived: false,
-            User: null
+            Owner: null
         };
 
         @Prop({required: true}) Id!: string;

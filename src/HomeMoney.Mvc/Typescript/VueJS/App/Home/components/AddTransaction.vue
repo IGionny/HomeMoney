@@ -103,30 +103,32 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import {ITransactionModel} from "../../../../@types/ITransactionModel";
-    import {IEntityReference} from "../../../../@types/IEntityReference";
     import * as moment from 'moment';
-    import axios, {AxiosResponse} from 'axios';
     import Tags from "../../components/Tags.vue";
     import {Prop} from "vue-property-decorator";
-    
+    import {IPagedRequest} from "../../../../@types/IPagedRequest";
+    import {IAccount} from "../../../../@types/IAccount";
+    import {ICategory} from "../../../../@types/ICategory";
+    import {GetPaged} from "../../../Utilities/AxiosHelpers";
+
     @Component({
         components: {Tags}
     })
     export default class AddExpenseVue extends Vue {
 
-        @Prop({required: true}) Mode !:string;
-        
+        @Prop({required: true}) Mode !: string;
+
         valid: boolean = true;
-        
-        get AccountLabel() :string {
-            if (this.Mode === "Expense"){
+
+        get AccountLabel(): string {
+            if (this.Mode === "Expense") {
                 return "From Account";
             }
             return "To Account";
         }
-        
-        get AddColor() : string{
-            if (this.Mode === "Expense"){
+
+        get AddColor(): string {
+            if (this.Mode === "Expense") {
                 return "red--text";
             }
             return "primary";
@@ -139,8 +141,7 @@
             return `${month}/${day}/${year}`
         };
 
-      
-        
+
         parseDate(date: string | null | undefined) {
             if (!date) return null
             return moment(date).format("yyyy-MM-DD");
@@ -158,9 +159,9 @@
             Notes: null,
             Tags: []
         };
-        
-        Accounts: IEntityReference[] = [];
-        Categories: IEntityReference[] = [];
+
+        Accounts: IAccount[] = [];
+        Categories: ICategory[] = [];
 
         titleRules: any[] = [
             (v: any) => !!v || 'Title is required',
@@ -190,27 +191,16 @@
         }
 
         LoadAccounts() {
-            axios.request<IEntityReference[]>({
-                method: 'GET',
-                url: '/Api/Accounts/All',
-            }).then<IEntityReference[]>((response: AxiosResponse<IEntityReference[]>): PromiseLike<IEntityReference[]> => {
-                this.Accounts = response.data;
-                return new Promise<IEntityReference[]>(resolve => response.data);
-            })
-                .catch((error: any) => {
-                    console.log(error)
-                });
-            
-            axios.request<IEntityReference[]>({
-                method: 'GET',
-                url: '/Api/Categories/All',
-            }).then<IEntityReference[]>((response: AxiosResponse<IEntityReference[]>): PromiseLike<IEntityReference[]> => {
-                this.Categories = response.data;
-                return new Promise<IEntityReference[]>(resolve => response.data);
-            })
-                .catch((error: any) => {
-                    console.log(error)
-                })
+            let request: IPagedRequest = {
+                Page: 0,
+                PageSize: 100,
+                Filters: [],
+                Orders: [{Field: "Name", Ascending: true}]
+            }
+
+            GetPaged<IAccount>(request, "Account").then(response => this.Accounts = response.Value);
+
+            GetPaged<ICategory>(request, "Category").then(response => this.Categories = response.Value);
         }
 
         mounted() {

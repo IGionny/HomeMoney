@@ -3,21 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HomeMoney.Core.Domain;
+using HomeMoney.Core.Models;
+using HomeMoney.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DefaultNamespace
 {
-  [Route("api/Categories/")]
-  public class CategoryApiController : BaseApiController
+  [Route("api/Category/")]
+  public class CategoryApiController : BaseCrudApiController<Category, CategoryCrudService>
   {
-    [HttpGet("All")]
-    public Task<IActionResult> All()
+    public CategoryApiController(CategoryCrudService categoryCrudService) : base(categoryCrudService)
     {
-      var hardEncodedList = new List<EntityReference>();
-      hardEncodedList.Add(new EntityReference(new Guid("4DA52392-0DBC-4488-A6AD-EC5984DB5460"), "Grocery"));
-      hardEncodedList.Add(new EntityReference(new Guid("4EC3DD5F-FBD5-434D-BA40-22D359225873"), "Various"));
-      hardEncodedList.Add(new EntityReference(new Guid("92B8CD0E-A0B9-4AC3-B2DA-759C51A869BB"), "Gifts"));
-      return Task.FromResult<IActionResult>(Ok(hardEncodedList.OrderBy(x => x.Name)));
+      if (!categoryCrudService.InMemoryEntities.Any())
+      {
+        //Push test data
+
+        categoryCrudService.SaveAsync(new Category() {Name = "Grocery"}, this.GetUserIdentity());
+        categoryCrudService.SaveAsync(new Category() {Name = "Various"}, this.GetUserIdentity());
+        categoryCrudService.SaveAsync(new Category() {Name = "Gifts"}, this.GetUserIdentity());
+      }
+    }
+
+
+    [HttpGet("All")]
+    public async Task<IActionResult> All()
+    {
+      var pagedRequest = new PagedRequest();
+      pagedRequest.Page = 0;
+      pagedRequest.PageSize = 100;
+      var result = await this._absCrudService.PagedAsync(pagedRequest).ConfigureAwait(false);
+      return Ok(result.Value);
     }
   }
 }

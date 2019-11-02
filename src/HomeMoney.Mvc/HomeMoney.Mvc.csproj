@@ -48,6 +48,7 @@
     <Content CopyToPublishDirectory="Always" Update="Base_Data\appsettings.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Typescript\VueJS\Services" />
     <Folder Include="wwwroot" />
   </ItemGroup>
   <ItemGroup>

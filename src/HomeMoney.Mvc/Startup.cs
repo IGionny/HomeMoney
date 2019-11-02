@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text.Json;
+using HomeMoney.Core.Domain;
+using HomeMoney.Core.Services;
 using HomeMoney.Mvc.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -32,18 +33,18 @@ namespace HomeMoney.Mvc
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddControllersWithViews(config =>
-      {
-        var policy = new AuthorizationPolicyBuilder()
-          .RequireAuthenticatedUser()
-          .Build();
-        config.Filters.Add(new AuthorizeFilter(policy));
-      })
+        {
+          var policy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
+          config.Filters.Add(new AuthorizeFilter(policy));
+        })
         .AddJsonOptions(options =>
           {
             //This reset the PropertyNamingPolicy: in this way it will respect the name of the properties..
             //The pre-set policy is CamelCase: in this way a property 'Name' became 'name'
             options.JsonSerializerOptions.PropertyNamingPolicy = null;
-          } 
+          }
         );
       /*.RemovePlainFormatter()
       .SetAuthorizePage();*/
@@ -77,6 +78,16 @@ namespace HomeMoney.Mvc
         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
         c.IncludeXmlComments(xmlPath);
       });
+      
+      //Add IoC configuration:
+
+      //For now is SINGLETON to maintain in memory data
+      services.AddSingleton<AccountCrudService, AccountCrudService>();
+      services.AddSingleton<AccountBalanceCrudService, AccountBalanceCrudService>();
+      services.AddSingleton<CategoryCrudService, CategoryCrudService>();
+      services.AddSingleton<TransactionCrudService, TransactionCrudService>();
+      services.AddSingleton<UserTag, UserTag>();
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

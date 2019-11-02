@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -43,12 +42,10 @@ namespace HomeMoney.Mvc
         {
           webBuilder.UseKestrel(options =>
             {
-              // Set properties and call methods on options
               options.AddServerHeader = false;
               options.Limits.MaxRequestBodySize = null;
             })
             .UseConfiguration(configuration)
-            .UseIISIntegration()
             .UseStartup<Startup>()
             .UseSerilog();
         });

@@ -4,6 +4,5 @@ namespace DefaultNamespace
 {
   public abstract class BaseApiController : Controller
   {
-    
   }
 }

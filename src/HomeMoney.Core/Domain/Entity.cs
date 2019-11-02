@@ -15,14 +15,30 @@ namespace HomeMoney.Core.Domain
 
     public abstract class UserEntity : Entity
     {
-        public EntityReference User { get; set; }
+        public Owner Owner { get; set; }
+    }
+
+
+    public class Owner
+    {
+        public Owner()
+        {
+        }
+
+        public Owner(string email, string name)
+        {
+            Email = email;
+            Name = name;
+        }
+
+        public string Email { get; set; }
+        public string Name { get; set; }
     }
 
     public class EntityReference
     {
         public EntityReference()
         {
-            
         }
 
         public EntityReference(Guid id, string name)
@@ -30,6 +46,7 @@ namespace HomeMoney.Core.Domain
             Id = id;
             Name = name;
         }
+
         public Guid Id { get; set; }
         public string Name { get; set; }
     }

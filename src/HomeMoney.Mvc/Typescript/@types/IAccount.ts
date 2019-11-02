@@ -7,3 +7,4 @@ export interface IAccount extends IUserEntity {
   FromAt: string | null;
   ToAt: string | null;
 }
+
