@@ -21,12 +21,13 @@ namespace DefaultNamespace
       _absCrudService = absCrudService ?? throw new ArgumentNullException(nameof(absCrudService));
     }
 
-    [HttpGet("id:{guid}")]
+    [HttpGet("{id:guid}")]
     public virtual async Task<IActionResult> Get([FromRoute] Guid id)
     {
-      var entity = await _absCrudService.GetAsync(id).ConfigureAwait(false);
-      if (entity == null) return NotFound();
-      return Ok(entity);
+      var resultGet = await _absCrudService.GetAsync(id).ConfigureAwait(false);
+      if (resultGet.Value == null) return NotFound();
+      if (!resultGet.IsValid) return BadRequest(resultGet);
+      return Ok(resultGet.Value);
     }
 
 
@@ -56,7 +57,7 @@ namespace DefaultNamespace
       return BadRequest(saveResult.ToString());
     }
 
-    [HttpDelete("id:{guid}")]
+    [HttpDelete("{id:guid}")]
     public virtual async Task<IActionResult> Delete([FromRoute] Guid id)
     {
       var deleteResult = await _absCrudService.DeleteAsync(id, GetUserIdentity()).ConfigureAwait(false);

@@ -30,3 +30,17 @@ export async function SaveAsync<T>(item: T, entityName: string): Promise<IResult
     throw(e);
   }
 }
+
+export async function GetAsync<T>(id: string, entityName: string): Promise<T> {
+  try {
+    let result = await axios.request<T>({
+      method: 'GET',
+      url: '/Api/' + entityName + "/" + id
+    });
+    return result.data;
+  } catch (e) {
+    //todo: show a Message Error
+    debugger;
+    throw(e);
+  }
+}

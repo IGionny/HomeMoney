@@ -12,6 +12,7 @@
       :server-items-length="totalItems"
       :items-per-page="15"
       class="elevation-1"
+      @click:row="SelectRow"
     >
       <template v-slot:item.FromAt="{ item }">
         {{item.FromAt | FormatDate}}
@@ -49,14 +50,22 @@
             {text: 'Created At', value: 'CreatedAt'}
         ];
 
-        options: any = {};
+        options: any = {
+            itemsPerPage: 15,
+            page: 1,
+            sortBy: ["CreatedAt"],
+            sortDesc: [true]
+        };
 
         @Watch("options", {deep: true})
         onOptionsChange() {
             this.pagedRequest.Page = (this.options.page as number) - 1;
             this.pagedRequest.PageSize = this.options.itemsPerPage as number;
-            if (this.options.sortBy.length > 0){
-                this.pagedRequest.Orders = [{Field:this.options.sortBy[0] as string, Ascending: !this.options.sortDesc[0] }]
+            if (this.options.sortBy.length > 0) {
+                this.pagedRequest.Orders = [{
+                    Field: this.options.sortBy[0] as string,
+                    Ascending: !this.options.sortDesc[0]
+                }]
             } else {
                 this.pagedRequest.Orders = [];
             }
@@ -88,7 +97,7 @@
             this.FetchDataSetAsync();
         }
 
-       
+
         PaginationChange(pagination: VuetifyDataPagination) {
             this.pagedRequest.PageSize = pagination.itemsPerPage;
             this.pagedRequest.Page = pagination.page - 1;
@@ -100,22 +109,8 @@
             this.lastPagedResponse = result;
         }
 
-        updateSortBy(field: string | string[]) {
-            if (typeof field === "string") {
-                this.pagedRequest.Orders = [{Field: field, Ascending: true}];
-                return;
-            }
-            this.pagedRequest.Orders = [{Field: field[0], Ascending: true}];
-
-        }
-
-        updateSortDesc(descending: boolean | boolean[]) {
-            if (this.pagedRequest.Orders === null || this.pagedRequest.Orders.length === 0) return;
-            if (typeof descending === "boolean"){
-                this.pagedRequest.Orders[0].Ascending = !descending;
-                return;
-            }
-            this.pagedRequest.Orders[0].Ascending = !descending[0];
+        SelectRow(item: IAccount) {
+            this.$router.push({path: "/accounts/edit/" + item.Id});
         }
 
     }

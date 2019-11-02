@@ -53,7 +53,7 @@
     import Component from "vue-class-component";
     import {IAccount} from "../../../@types/IAccount";
     import {Prop} from "vue-property-decorator";
-    import {SaveAsync} from "../../Utilities/AxiosHelpers";
+    import {GetAsync, SaveAsync} from "../../Utilities/AxiosHelpers";
     import {IResultModel} from "../../../@types/IResultModel";
 
     @Component
@@ -77,8 +77,10 @@
         }
 
         LoadAccount() {
+            const self = this;
             if (this.Id !== null && this.Id !== undefined) {
-                //Load Account
+                //todo: threat 404
+                GetAsync(this.Id, "Account").then((data: IAccount) => self.Item = data);
             }
         }
 
@@ -111,7 +113,6 @@
             SaveAsync<IAccount>(this.Item, "Account").then((response: IResultModel<IAccount>) => {
                 self.Item = response.Value;
                 //todo: Message info ok;
-                //todo: programmatically redirect to grid
                 self.$router.push({path: "/accounts"});
             });
         }
@@ -126,7 +127,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

@@ -59,13 +59,11 @@ namespace HomeMoney.Core.Services
             if (InMemoryEntities.ContainsKey(entityId))
             {
                 result.Value = InMemoryEntities[entityId];
+                if (result.Value.IsDeleted)
+                {
+                    result.AddInfo("The entity is deleted");
+                }
             }
-
-            if (result.Value.IsDeleted)
-            {
-                result.AddInfo("The entity is deleted");
-            }
-
             return result;
         }
 
