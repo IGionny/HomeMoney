@@ -17,3 +17,12 @@ export interface ITransaction extends IUserEntity {
   TagList: string[];
 }
 
+export interface ITransactionRow {
+  Date: string;
+  Title: string;
+  Expense: number;
+  Income: number;
+  Category: string;
+  Tags: string;
+  CreatedAt: string;
+}

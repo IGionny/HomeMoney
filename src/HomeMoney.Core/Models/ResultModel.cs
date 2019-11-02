@@ -20,7 +20,14 @@ namespace HomeMoney.Core.Models
 
         public IList<ResultMessage> Messages { get; set; }
 
-        public bool IsValid => Messages.Any(x => x.Level != ResultMessageLevel.Info);
+        public bool IsValid
+        {
+            get
+            {
+                if (!Messages.Any()) return true;
+                return Messages.All(x => x.Level == ResultMessageLevel.Info);      
+            }
+        } 
 
         public ResultModel<T> AddError(string message, string property = null, int code = 0)
         {

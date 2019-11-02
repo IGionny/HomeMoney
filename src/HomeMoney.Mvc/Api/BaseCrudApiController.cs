@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HomeMoney.Core.Domain;
 using HomeMoney.Core.Models;
 using HomeMoney.Core.Services;
+using HomeMoney.Mvc.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DefaultNamespace
@@ -32,6 +33,10 @@ namespace DefaultNamespace
     [HttpPost]
     public virtual async Task<IActionResult> Create([FromBody] T entity)
     {
+      if (!ModelState.IsValid || entity == null)
+      {
+        return BadRequest(ModelState.ToMessageModel());
+      } 
       var saveResult = await _absCrudService.SaveAsync(entity, GetUserIdentity()).ConfigureAwait(false);
       if (saveResult.IsValid) return Ok(entity);
 
@@ -41,6 +46,10 @@ namespace DefaultNamespace
     [HttpPut]
     public virtual async Task<IActionResult> Update([FromBody] T entity)
     {
+      if (!ModelState.IsValid || entity == null)
+      {
+        return BadRequest(ModelState.ToMessageModel());
+      } 
       var saveResult = await _absCrudService.SaveAsync(entity, GetUserIdentity()).ConfigureAwait(false);
       if (saveResult.IsValid) return Ok(entity);
 
@@ -57,6 +66,8 @@ namespace DefaultNamespace
 
     protected virtual void AddDefaultFilters(PagedRequest pagedRequest)
     {
+    
+      
       //Force 2 filters:
       //get only elements that are owned by current user
       //get only elements that are not deleted
@@ -68,10 +79,15 @@ namespace DefaultNamespace
     [HttpPost("Paged")]
     public virtual async Task<IActionResult> Paged([FromBody] PagedRequest request)
     {
+      if (!ModelState.IsValid || request == null)
+      {
+        return BadRequest(ModelState.ToMessageModel());
+      } 
+      
       AddDefaultFilters(request);
 
       var pagedResult = await _absCrudService.PagedAsync(request).ConfigureAwait(false);
-      if (pagedResult.IsValid) return Ok(pagedResult.Value);
+      if (pagedResult.IsValid) return Ok(pagedResult);
       return BadRequest(pagedResult.ToString());
     }
 
