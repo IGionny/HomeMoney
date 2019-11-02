@@ -112,7 +112,7 @@
                 self.Item = response.Value;
                 //todo: Message info ok;
                 //todo: programmatically redirect to grid
-                self.$router.push({path: "accounts"});
+                self.$router.push({path: "/accounts"});
             });
         }
 

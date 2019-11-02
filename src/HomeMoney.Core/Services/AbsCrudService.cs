@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HomeMoney.Core.Domain;
+using HomeMoney.Core.Extensions;
 using HomeMoney.Core.Models;
 
 namespace HomeMoney.Core.Services
@@ -74,9 +75,15 @@ namespace HomeMoney.Core.Services
             result.Current = request.Page;
             result.PageSize = request.PageSize;
             result.Total = InMemoryEntities.Count;
-            result.Value = InMemoryEntities.Select(x => x.Value).Where(x => !x.IsDeleted)
+            var dataList = InMemoryEntities.Select(x => x.Value).Where(x => !x.IsDeleted);
+            if (request.Orders.Any())
+            {
+                dataList = dataList.OrderBy(request.Orders[0].Field, request.Orders[0].Ascending);
+            }
+            result.Value = dataList
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize).ToList();
+            
             return result;
         }
 

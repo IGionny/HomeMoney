@@ -10,11 +10,15 @@
       :headers="headers"
       :items="Items"
       :server-items-length="totalItems"
-      @update:sort-by="updateSortBy"
-      @update:sort-desc="updateSortDesc"
       :items-per-page="15"
       class="elevation-1"
     >
+      <template v-slot:item.FromAt="{ item }">
+        {{item.FromAt | FormatDate}}
+      </template>
+      <template v-slot:item.ToAt="{ item }">
+        {{item.ToAt | FormatDate}}
+      </template>
       <template v-slot:item.CreatedAt="{ item }">
         {{item.CreatedAt | FormatDateTime}}
       </template>
@@ -49,7 +53,14 @@
 
         @Watch("options", {deep: true})
         onOptionsChange() {
-            console.log(this.options);
+            this.pagedRequest.Page = (this.options.page as number) - 1;
+            this.pagedRequest.PageSize = this.options.itemsPerPage as number;
+            if (this.options.sortBy.length > 0){
+                this.pagedRequest.Orders = [{Field:this.options.sortBy[0] as string, Ascending: !this.options.sortDesc[0] }]
+            } else {
+                this.pagedRequest.Orders = [];
+            }
+            this.FetchDataSetAsync();
         }
 
         accounts: IAccount[] = [];
@@ -77,11 +88,7 @@
             this.FetchDataSetAsync();
         }
 
-        @Watch("pagedRequest", {deep: true})
-        onPagedChange() {
-            this.FetchDataSetAsync();
-        }
-
+       
         PaginationChange(pagination: VuetifyDataPagination) {
             this.pagedRequest.PageSize = pagination.itemsPerPage;
             this.pagedRequest.Page = pagination.page - 1;
