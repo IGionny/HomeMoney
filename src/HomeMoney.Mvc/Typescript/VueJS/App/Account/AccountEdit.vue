@@ -41,25 +41,30 @@
         ></v-switch>
       </v-col>
       <v-col cols="12" md="6" align="right">
-        <v-btn dark @click="Save">Save</v-btn>
+
       </v-col>
     </v-row>
-
+    <v-row>
+      <v-col cols="12" md="6">
+        <v-btn class="secondary" @click="Cancel">Cancel</v-btn>
+      </v-col>
+      <v-col cols="12" md="6" align="right">
+        <v-btn @click="Save">Save</v-btn>
+      </v-col>
+    </v-row>
   </v-form>
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
     import Component from "vue-class-component";
     import {IAccount} from "../../../@types/IAccount";
-    import {Prop} from "vue-property-decorator";
-    import {GetAsync, SaveAsync} from "../../Utilities/AxiosHelpers";
-    import {IResultModel} from "../../../@types/IResultModel";
+    import CommonEdit from "../../SharedComponents/CommonEdit";
 
     @Component
-    export default class EditAccountVue extends Vue {
-        valid: boolean = true;
+    export default class AccountEditVue extends CommonEdit<IAccount> {
 
+        entityName: string = "account";
+        
         Item: IAccount = {
             Name: "",
             FirstBalance: 0,
@@ -69,61 +74,10 @@
             Owner: null
         };
 
-        @Prop({required: true}) Id!: string;
-
-        beforeRouteUpdate(to: any, from: object, next: Function) {
-            this.Id = to.params.Id;
-            next();
-        }
-
-        LoadAccount() {
-            const self = this;
-            if (this.Id !== null && this.Id !== undefined) {
-                //todo: threat 404
-                GetAsync(this.Id, "Account").then((data: IAccount) => self.Item = data);
-            }
-        }
-
-        mounted() {
-            this.LoadAccount();
-        }
-
         nameRules: any[] = [
             (v: any) => !!v || 'Name is required',
             (v: any) => (v && v.length > 3) || 'Name must be greater than 3 characters',
         ];
 
-
-        validate() {
-            if ((<any>this.$refs.form).validate()) {
-
-            }
-        }
-
-        reset() {
-            (<any>this.$refs.form).reset()
-        }
-
-        resetValidation() {
-            (<any>this.$refs.form).resetValidation();
-        }
-
-        Save() {
-            const self = this;
-            SaveAsync<IAccount>(this.Item, "Account").then((response: IResultModel<IAccount>) => {
-                self.Item = response.Value;
-                //todo: Message info ok;
-                self.$router.push({path: "/accounts"});
-            });
-        }
-
-        beforeRouteLeave(to: any, from: object, next: Function) {
-            const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-            if (answer) {
-                next()
-            } else {
-                next(false)
-            }
-        }
     }
 </script>

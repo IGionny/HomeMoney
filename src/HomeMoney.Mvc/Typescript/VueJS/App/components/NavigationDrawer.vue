@@ -46,6 +46,7 @@
             v-for="(child, i) in item.children"
             :key="i"
             @click=""
+            :exact="item.exact"
           >
             <v-list-item-action v-if="child.icon">
               <v-icon>{{ child.icon }}</v-icon>
@@ -89,9 +90,9 @@
 
         items: any[] = [
             {icon: 'fa-desktop', text: 'Dashboard', url: "/", exact: true},
-            {icon: 'fa-funnel-dollar', text: 'Transactions', url: "/Transactions", exact: false},
-            {icon: 'fa-wallet', text: 'Accounts', url: "/Accounts", exact: true},
-            {icon: 'fa-list-ul', text: 'Categories', url: "/Categories", exact: false},
+            {icon: 'fa-funnel-dollar', text: 'Transactions', url: "/transaction", exact: false},
+            {icon: 'fa-wallet', text: 'Accounts', url: "/account", exact: false},
+            {icon: 'fa-list-ul', text: 'Categories', url: "/category", exact: false},
             {icon: 'fa-chart-pie', text: 'Charts', url: "/Charts", exact: false},
             {icon: 'fa-file-csv', text: 'Compare with csv', url: "/ImportCSV", exact: false}
             /*

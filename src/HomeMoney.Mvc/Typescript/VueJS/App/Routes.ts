@@ -1,9 +1,13 @@
 import home from "./Home/Index.vue";
 import {VueConstructor} from "vue/types/vue";
-import Transactions from "./Transaction/Transactions.vue";
+
 import Accounts from "./Account/Accounts.vue";
+import AccountEdit from "./Account/AccountEdit.vue";
+//-----
 import Categories from "./Category/Categories.vue";
-import EditAccount from "./Account/EditAccount.vue";
+import CategoryEdit from "./Category/CategoryEdit.vue";
+//-----
+import Transactions from "./Transaction/Transactions.vue";
 
 export interface IRoute {
   path: string;
@@ -15,12 +19,15 @@ export interface IRoute {
 export const Routes: IRoute[] = [{
   path: '', component: home,
 }, {
-  path: '/transactions', component: Transactions,
-},  {
-  path: '/accounts', component: Accounts
+  path: '/transaction', component: Transactions,
 }, {
-  path: '/accounts/edit/:Id?', component: EditAccount, props: true
-},{
-  path: '/categories', component: Categories
-}
+  path: '/account', component: Accounts
+}, {
+  path: '/account/edit/:Id?', component: AccountEdit, props: true
+}, {
+  path: '/category', component: Categories
+},
+  {
+    path: '/category/edit/:Id?', component: CategoryEdit, props: true
+  }
 ];
